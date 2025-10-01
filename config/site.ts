@@ -1,8 +1,8 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Next.js + HeroUI",
-  description: "Make beautiful websites regardless of your design experience.",
+  name: "Market",
+  description: "Discover technical products.",
   navItems: [
     {
       label: "Home",
@@ -62,4 +62,12 @@ export const siteConfig = {
     discord: "https://discord.gg/9b6yyZKmH4",
     sponsor: "https://patreon.com/jrgarciadev",
   },
+  catalogItems: [
+    { title: 'Processors', href: '/catalog/processors' },
+    { title: 'Monitors', href: '/catalog/monitors' },
+    { title: 'Cases', href: '/catalog/cases' },
+    { title: 'CPU', href: '/catalog/cpu' },
+    { title: 'Video Cards', href: '/catalog/video-cards' },
+    { title: 'Motherboards', href: '/catalog/motherboards' },
+  ],
 };
