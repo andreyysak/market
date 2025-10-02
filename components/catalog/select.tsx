@@ -7,6 +7,7 @@ import { useState } from "react";
 export default function SelectCategory() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const handleSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => setSelectedCategory(e.target.value);
+
   
   return (
     <Select
