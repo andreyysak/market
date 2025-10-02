@@ -1,7 +1,9 @@
 import { appRouter } from '@/server/routers/_app';
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 
-export const runtime = 'edge';
+export const config = {
+  runtime: 'node',
+};
 
 const handler = (req: Request) =>
   fetchRequestHandler({
