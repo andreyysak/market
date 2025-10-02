@@ -1,12 +1,10 @@
 'use client'
 
-import { useState } from "react";
 import { NumberInput } from "@heroui/number-input";
+import { usePerPageStore } from "@/store/per-page";
 
 export default function PerPageInput() {
-  const [perPage, setPerPage] = useState<number>(10)
-
-  const handleChangePerPage = (value: number) => setPerPage(value);
+  const { perPage, setPerPage } = usePerPageStore()
 
   return (
     <NumberInput
@@ -14,7 +12,7 @@ export default function PerPageInput() {
       color="danger"
       className="max-w-xs"
       value={perPage}
-      onValueChange={handleChangePerPage}
+      onValueChange={(value) => setPerPage(value)}
       label="Products per page"
       placeholder="Enter the amount"
     />

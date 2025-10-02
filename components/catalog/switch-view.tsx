@@ -1,18 +1,16 @@
-'use client'
+'use client';
 
-import { Switch } from "@heroui/switch";
-import { cn } from "@heroui/theme";
-import { useState } from "react";
+import { Switch } from '@heroui/switch';
+import { cn } from '@heroui/theme';
+import { useViewStore } from '@/store/view';
 
 export default function SwitchView() {
-  const [isTableView, setIsTableView] = useState(false); // false = grid, true = table
-
-  const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => setIsTableView(e.target.checked)
+  const { isTableView, setView } = useViewStore();
 
   return (
     <Switch
       isSelected={isTableView}
-      onChange={handleSwitchChange}
+      onChange={(e) => setView(e.target.checked)}
       classNames={{
         base: cn(
           "inline-flex flex-row-reverse w-full max-w-md bg-content1 hover:bg-content2 items-center",
