@@ -2,13 +2,19 @@
 const nextConfig = {
   allowedDevOrigins: [
     'http://localhost:3000',
-    'http://192.168.56.1:3000'
+    'http://192.168.56.1:3000',
   ],
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'static.nadzor.ua',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.telemart.ua',
         port: '',
         pathname: '/**',
       },

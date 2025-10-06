@@ -23,17 +23,29 @@ import Image from 'next/image';
 type Product = {
   title: string;
   price: string;
-  description: string;
+  description?: string;
   product_link: string;
   image_url: string;
-  characteristics: Record<string, string>;
+  characteristics?: Record<string, string>;
 };
+
+function normalizeProduct(raw: any): Product {
+  return {
+    title: raw.title || raw['Full Name'] || 'Без назви',
+    price: raw.price || raw['Price'] || '—',
+    description: raw.description || raw['Description'] || '',
+    product_link: raw.product_link || raw['Product URL'] || '#',
+    image_url: raw.image_url || raw['Image URL'] || '',
+    characteristics: raw.characteristics || undefined,
+  };
+}
+
 
 type ProductRow = {
   key: string;
   title: string;
   price: string;
-  description: string;
+  photo: string;
 };
 
 type Column = {
@@ -59,19 +71,20 @@ export default function ProductList() {
 
   const totalPages = Math.ceil(data.length / perPage);
   const paginated = data.slice((page - 1) * perPage, page * perPage);
+  const normalized: Product[] = paginated.map(normalizeProduct);
 
   if (isTableView) {
     const columns: Column[] = [
+      { key: 'photo', label: 'PHOTO' },
       { key: 'title', label: 'PRODUCT' },
       { key: 'price', label: 'PRICE' },
-      { key: 'description', label: 'DESCRIPTION' },
     ];
 
-    const rows: ProductRow[] = paginated.map((product: Product, index: number) => ({
-      key: String(index),
+    const rows: ProductRow[] = normalized.map((product, index) => ({
+      key: product.product_link || String(index),
+      photo: product.image_url || '',
       title: product.title,
       price: product.price,
-      description: product.description,
     }));
 
     return (
@@ -86,7 +99,23 @@ export default function ProductList() {
             {(item: ProductRow) => (
               <TableRow key={item.key}>
                 {(columnKey) => (
-                  <TableCell>{getKeyValue(item, columnKey as keyof ProductRow)}</TableCell>
+                  <TableCell>
+                    {columnKey === 'photo' ? (
+                      item.photo ? (
+                        <img
+                          src={item.photo}
+                          alt={item.title}
+                          className="w-12 h-12 object-cover rounded-md"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 bg-default-100 rounded-md flex items-center justify-center text-xs text-default-400">
+                          N/A
+                        </div>
+                      )
+                    ) : (
+                      getKeyValue(item, columnKey as keyof ProductRow)
+                    )}
+                  </TableCell>
                 )}
               </TableRow>
             )}
@@ -97,7 +126,7 @@ export default function ProductList() {
           total={totalPages}
           onChange={setPage}
           showControls
-          className="mt-6"
+          className="mt-6 flex justify-center"
         />
       </>
     );
@@ -106,21 +135,25 @@ export default function ProductList() {
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {paginated.map((product: Product) => (
-          <Card key={product.title} className="py-4">
+        {normalized.map((product: Product) => (
+          <Card key={product.product_link} className="py-4">
             <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
               <p className="text-tiny uppercase font-bold">{product.price}</p>
               <small className="text-default-500">{selected}</small>
               <h4 className="font-bold text-large">{product.title}</h4>
             </CardHeader>
             <CardBody className="overflow-visible py-2">
-              <Image
-                alt={product.title}
-                className="object-cover rounded-xl"
-                src={product.image_url}
-                width={270}
-                height={180}
-              />
+              <div className="flex justify-center">
+                {product.image_url && (
+                  <Image
+                    src={product.image_url}
+                    alt={product.title}
+                    className="object-cover rounded-xl"
+                    width={270}
+                    height={180}
+                  />
+                )}
+              </div>
             </CardBody>
           </Card>
         ))}
