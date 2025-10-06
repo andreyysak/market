@@ -1,10 +1,10 @@
 'use client'
 
+import { usePaginationStore } from "@/store/per-page";
 import { NumberInput } from "@heroui/number-input";
-import { usePerPageStore } from "@/store/per-page";
 
 export default function PerPageInput() {
-  const { perPage, setPerPage } = usePerPageStore()
+  const { perPage, setPerPage } = usePaginationStore()
 
   return (
     <NumberInput

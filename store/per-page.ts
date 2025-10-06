@@ -1,11 +1,17 @@
 import { create } from 'zustand';
 
-type PerPageState = {
+type PaginationState = {
+  page: number;
   perPage: number;
-  setPerPage: (perPage: number) => void
-}
+  setPage: (page: number) => void;
+  setPerPage: (perPage: number) => void;
+  resetPage: () => void;
+};
 
-export const usePerPageStore = create<PerPageState>((set) => ({
+export const usePaginationStore = create<PaginationState>((set) => ({
+  page: 1,
   perPage: 10,
-  setPerPage: (perPage) => set({ perPage})
-}))
+  setPage: (page) => set({ page }),
+  setPerPage: (perPage) => set({ perPage, page: 1 }), // reset page on perPage change
+  resetPage: () => set({ page: 1 }),
+}));

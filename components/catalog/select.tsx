@@ -3,6 +3,7 @@
 import { Select, SelectItem } from '@heroui/select';
 import { trpc } from '@/utils/trpc';
 import { useCategoryStore } from '@/store/category';
+import { Spinner } from '@heroui/spinner';
 
 type CategoryOption = {
   id: string;
@@ -13,7 +14,7 @@ export default function SelectCategory() {
   const { selected, setSelected } = useCategoryStore();
   const { data = [], isLoading } = trpc.product.list.useQuery();
 
-  if (isLoading) return <p>Loading categories...</p>;
+  if (isLoading) return <Spinner />;
 
   const categoryOptions: CategoryOption[] = data.map((c) => ({
     id: c.category,
