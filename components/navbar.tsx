@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Navbar as HeroUINavbar,
   NavbarContent,
@@ -7,7 +9,6 @@ import {
   NavbarItem,
   NavbarMenuItem,
 } from "@heroui/navbar";
-import { Button } from "@heroui/button";
 import { Kbd } from "@heroui/kbd";
 import { Link } from "@heroui/link";
 import { Input } from "@heroui/input";
@@ -18,18 +19,25 @@ import clsx from "clsx";
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import {
-  TwitterIcon,
   GithubIcon,
-  DiscordIcon,
-  HeartFilledIcon,
   SearchIcon,
   Logo,
 } from "@/components/icons";
+import { useSearchStore } from "@/store/search";
+import SearchResult from "./home/search-result";
 
 export const Navbar = () => {
+  const { query, setQuery, clearQuery } = useSearchStore();
+
+  console.log(query)
+
   const searchInput = (
     <Input
       aria-label="Search"
+      value={query}
+      onValueChange={setQuery}
+      onClear={clearQuery}
+      isClearable
       classNames={{
         inputWrapper: "bg-default-100",
         input: "text-sm",
@@ -82,19 +90,12 @@ export const Navbar = () => {
         <NavbarItem className="hidden sm:flex gap-2">
           <ThemeSwitch />
         </NavbarItem>
-        <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
-        {/* <NavbarItem className="hidden md:flex">
-          <Button
-            isExternal
-            as={Link}
-            className="text-sm font-normal text-default-600 bg-default-100"
-            href={siteConfig.links.sponsor}
-            startContent={<HeartFilledIcon className="text-danger" />}
-            variant="flat"
-          >
-            Sign In
-          </Button>
-        </NavbarItem> */}
+        <NavbarItem className="hidden lg:flex relative flex-col">
+          {searchInput}
+          <div className="absolute top-full left-0 w-full z-50">
+            <SearchResult />
+          </div>
+        </NavbarItem>
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
